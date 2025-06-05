@@ -11,6 +11,7 @@
     "build": "tsc",
     "lint": "eslint .",
     "prepublishOnly": "npm run build",
+    "prepare": "npm run build",
     "test": "echo \"Error: no test specified yet\" && exit 1"
   },
   "repository": {
