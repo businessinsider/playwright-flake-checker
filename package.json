@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "A tool to check for flaky Playwright tests by running them multiple times and analyzing results.",
   "bin": {
-    "playwright-flake-checker": "./dist/cli.js"
+    "playwright-flake-checker": "dist/cli.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "node dist/cli.js",
     "build": "tsc",
