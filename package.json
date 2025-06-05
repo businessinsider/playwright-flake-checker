@@ -27,7 +27,7 @@
     "automation"
   ],
   "author": "Business Insider",
-  "license": "ICS",
+  "license": "ISC",
   "dependencies": {
     "@inquirer/prompts": "^7.5.3",
     "chalk": "^5.4.1",
