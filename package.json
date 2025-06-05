@@ -1,0 +1,51 @@
+{
+  "name": "@businessinsider/playwright-flake-checker",
+  "version": "1.0.0",
+  "description": "A tool to check for flaky Playwright tests by running them multiple times and analyzing results.",
+  "bin": {
+    "playwright-flake-checker": "./dist/cli.js"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "start": "node dist/cli.js",
+    "build": "tsc",
+    "lint": "eslint .",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"Error: no test specified yet\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/businessinsider/playwright-flake-checker.git"
+  },
+  "type": "module",
+  "keywords": [
+    "playwright",
+    "testing",
+    "flake",
+    "flaky",
+    "test-runner",
+    "automation"
+  ],
+  "author": "Business Insider",
+  "license": "ICS",
+  "dependencies": {
+    "@inquirer/prompts": "^7.5.3",
+    "chalk": "^5.4.1",
+    "eslint": "^8.57.1",
+    "eslint-plugin-playwright": "^2.2.0",
+    "figlet": "^1.8.1",
+    "inquirer-select-pro": "^1.0.0-alpha.9"
+  },
+  "devDependencies": {
+    "@types/chalk": "^2.2.0",
+    "@types/eslint": "^9.6.1",
+    "@types/figlet": "^1.5.8",
+    "@types/node": "^20.17.57",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.4",
+    "typescript": "^5.4.5"
+  },
+  "peerDependencies": {
+    "playwright": ">=1.45.0"
+  }
+}
