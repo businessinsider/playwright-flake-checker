@@ -7,7 +7,7 @@ Playwright Flake Checker is a tool designed to help developers identify, analyze
 ## Installation
 
 ```bash
-npm install -g playwright-flake-checker
+npm install -g @businessinsider/playwright-flake-checker
 ```
 
 ## Usage
