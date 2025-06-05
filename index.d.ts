@@ -47,7 +47,6 @@ declare global {
     error: (text: string) => string;
     warning: (text: string) => string;
     info: (text: string) => string;
-    highlight: (text: string) => string;
     subtle: (text: string) => string;
     emphasis: (text: string) => string;
     filename: (text: string) => string;

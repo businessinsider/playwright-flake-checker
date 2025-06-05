@@ -10,8 +10,11 @@
     "start": "node dist/cli.js",
     "build": "tsc",
     "lint": "eslint .",
-    "prepublishOnly": "npm run build",
+    "prepare": "npm run build",
     "test": "echo \"Error: no test specified yet\" && exit 1"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "repository": {
     "type": "git",
@@ -27,7 +30,7 @@
     "automation"
   ],
   "author": "Business Insider",
-  "license": "ICS",
+  "license": "ISC",
   "dependencies": {
     "@inquirer/prompts": "^7.5.3",
     "chalk": "^5.4.1",
@@ -40,7 +43,7 @@
     "@types/chalk": "^2.2.0",
     "@types/eslint": "^9.6.1",
     "@types/figlet": "^1.5.8",
-    "@types/node": "^20.17.57",
+    "@types/node": "^20.17.58",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.4",
     "typescript": "^5.4.5"
