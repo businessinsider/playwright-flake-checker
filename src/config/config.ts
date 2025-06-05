@@ -4,6 +4,9 @@ import { log, styled } from '../utils/logger.js';
 
 const { filename } = styled;
 
+/**
+ * Holds runtime configuration values collected from user prompts.
+ */
 let config: Config = {
   baseUrl: '',
   playwrightConfig: '',
