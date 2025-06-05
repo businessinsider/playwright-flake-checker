@@ -8,6 +8,9 @@ import { runCommand } from '../utils/command.js';
 
 const { command: commandStyling, emphasis, url } = styled;
 
+/**
+ * Tracks whether the server was started in detached mode.
+ */
 let detachedServer = false;
 
 /**
@@ -60,7 +63,8 @@ export const checkServerStatus = async (
 
 /**
  * Determines if the server is running in detached mode.
- * @returns {Promise<boolean>} - Returns true if the server was started successfully, false otherwise.
+ *
+ * @returns {boolean} True if a detached server was started, otherwise false.
  */
 export const isDetachedServerRunning = (): boolean => detachedServer;
 
