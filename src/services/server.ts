@@ -35,7 +35,7 @@ export const checkServerStatus = async (
       clearTimeout(id);
 
       return response.ok;
-    } catch (error) {
+    } catch {
       return false;
     }
   };
@@ -59,7 +59,7 @@ export const checkServerStatus = async (
   log().info(`\nChecking server status at ${url(route)}...\n`);
 
   return poll();
-}
+};
 
 /**
  * Determines if the server is running in detached mode.
@@ -74,7 +74,7 @@ export const isDetachedServerRunning = (): boolean => detachedServer;
  * @returns {void}
  */
 export const setDetachedServerState = (state: boolean): void => {
-  detachedServer = state
+  detachedServer = state;
 };
 
 /**
@@ -208,7 +208,7 @@ export const startServer = async (
 
     return false;
   }
-}
+};
 
 /**
  * Handles the server prompt logic based on whether the server is already running.
@@ -233,15 +233,51 @@ export const handleServerPrompt = async (isServerRunning: boolean): Promise<bool
       });
 
       if (manuallyStartServer) {
-        if (await startServer(true)) {
+        const urls = CONFIG.baseUrls && CONFIG.baseUrls.length > 0 ? CONFIG.baseUrls : CONFIG.baseUrl ? [CONFIG.baseUrl] : [];
+
+        if (CONFIG.startServersSeparately && urls.length > 1) {
+          for (const singleUrl of urls) {
+            if (await checkServerStatus(singleUrl, 3000)) continue;
+
+            if (await startServer(true)) {
+              log().info(`\nAttempting to start server for ${url(singleUrl)}. Waiting a few seconds for it to initialize...\n`);
+
+              await sleep(5000);
+
+              if (!(await checkServerStatus(singleUrl, 30000))) {
+                log().warning(`${url(singleUrl)} is still not responsive after auto-start. Check server logs.`);
+              } else {
+                log().green(`Server at ${url(singleUrl)} seems to be running now.\n`);
+              }
+            } else {
+              log().error('Server could not be started by the script.\n');
+
+              return false;
+            }
+          }
+
+          return true;
+        } else if (await startServer(true)) {
           log().info('\nAttempting to start server. Waiting a few seconds for it to initialize...\n');
 
           await sleep(5000);
 
-          if (CONFIG.baseUrl && !(await checkServerStatus(CONFIG.baseUrl, 30000))) {
-            log().warning(`${url(CONFIG.baseUrl)} is still not responsive after auto-start. Check server logs.`);
-          } else if (CONFIG.baseUrl) {
-            log().green(`Server at ${url(CONFIG.baseUrl)} seems to be running now.\n`);
+          if (urls.length > 1) {
+            const failed: string[] = [];
+            for (const serverUrl of urls) {
+              if (!(await checkServerStatus(serverUrl, 30000))) {
+                failed.push(serverUrl);
+              }
+            }
+            if (failed.length > 0) {
+              log().warning(`${failed.map(u => url(u)).join(', ')} is still not responsive after auto-start. Check server logs.`);
+            } else {
+              log().green(`Server${urls.length > 1 ? 's' : ''} at ${urls.map(u => url(u)).join(', ')} seem to be running now.\n`);
+            }
+          } else if (urls[0] && !(await checkServerStatus(urls[0], 30000))) {
+            log().warning(`${url(urls[0])} is still not responsive after auto-start. Check server logs.`);
+          } else if (urls[0]) {
+            log().green(`Server at ${url(urls[0])} seems to be running now.\n`);
           }
 
           return true;
@@ -257,4 +293,4 @@ export const handleServerPrompt = async (isServerRunning: boolean): Promise<bool
   }
 
   return true;
-}
+};

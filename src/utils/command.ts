@@ -1,5 +1,5 @@
 import { log } from './logger.js';
-import { spawn } from 'child_process';
+import { ChildProcess, spawn } from 'child_process';
 
 /**
  * Cleans up event listeners from both the process and child object.
@@ -14,14 +14,18 @@ import { spawn } from 'child_process';
  */
 export const cleanup = (
   proc: NodeJS.Process,
-  child: { removeListener: (arg0: string, arg1: any) => void; },
-  handlers: { error: any; exit: any; ctrlC: any; }
+  child: ChildProcess,
+  handlers: {
+    error: (_error: Error) => void;
+    exit: (_code: number | null, _signal: string | null) => void;
+    ctrlC: () => void;
+  }
 ): void => {
   proc.removeListener('SIGINT', handlers.ctrlC);
   child.removeListener('exit', handlers.exit);
   child.removeListener('close', handlers.exit);
   child.removeListener('error', handlers.error);
-}
+};
 
 /**
  * Creates a command executor function that runs shell commands as child processes
@@ -34,11 +38,11 @@ export const cleanup = (
  *   - `captureOutput` If true, captures and returns command output
  */
 export const createCommandExecutor = (): (
-  command: string,
-  args?: string[],
-  env?: Record<string, string>,
-  silent?: boolean,
-  captureOutput?: boolean
+  _command: string,
+  _args?: string[],
+  _env?: Record<string, string>,
+  _silent?: boolean,
+  _captureOutput?: boolean
 ) => Promise<CommandResult> => {
   return (
     command: string,
@@ -79,13 +83,13 @@ export const createCommandExecutor = (): (
     }
 
     const handlers = {
-      error: (err: any) => {
+      error: (err: Error) => {
         cleanup(process, child, handlers);
         log().red(`Error executing command: ${fullCommand}`);
 
         reject(err);
       },
-      exit: (code: number, signal: string) => {
+      exit: (code: number | null, signal: string | null) => {
         cleanup(process, child, handlers);
 
         const output = stdoutData + stderrData;
@@ -97,11 +101,17 @@ export const createCommandExecutor = (): (
           log().red(`Command failed: ${fullCommand} (exit code ${code}, signal ${signal})`);
 
           resolve({
-            code, signal, output, success: false
+            code: code ?? 0,
+            signal: signal ?? '',
+            output,
+            success: false
           });
         } else {
           resolve({
-            code, signal, output, success: true
+            code: code ?? 0,
+            signal: signal ?? '',
+            output,
+            success: true
           });
         }
       },
@@ -115,7 +125,7 @@ export const createCommandExecutor = (): (
     child.once('exit', handlers.exit);
     child.once('error', handlers.error);
   });
-}
+};
 
 /**
  * Executes commands using the command executor created by `createCommandExecutor`.

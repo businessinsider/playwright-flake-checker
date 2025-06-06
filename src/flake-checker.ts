@@ -1,7 +1,7 @@
 import { displayBanner, log, styled } from './utils/logger.js';
 import { runCommand } from './utils/command.js';
 import { gracefulExit, handleError } from './utils/common.js';
-import { findConfigFiles, getConfig, updateConfig } from './config/config.js';
+import { findConfigFiles, updateConfig } from './config/config.js';
 import { checkServerStatus, handleServerPrompt } from './services/server.js';
 import { checkForIsolatedTests, getAndSelectPlaywrightTests, runPlaywrightTests } from './services/tests.js';
 import { confirm, input, number } from '@inquirer/prompts';
@@ -29,9 +29,10 @@ export const flakeChecker = async (): Promise<void> => {
   }
 
   const baseUrl = await input({
-    message: 'Enter the base URL your tests will run against (e.g., http://localhost:3000):',
-    default: 'http://localhost:3000',
+    message: 'Enter the base URL your tests will run against (e.g., http://localhost):',
+    default: 'http://localhost',
     validate: val => {
+      if (!val) return true;
       try {
         const parsedUrl = new URL(val);
 
@@ -47,17 +48,45 @@ export const flakeChecker = async (): Promise<void> => {
   });
 
   const ports = await input({
-    message: 'Enter the port(s) your server(s) run on (comma-separated, no spaces, e.g., 3000,3001):',
+    message: 'Enter the port(s) your server(s) run on (comma-separated, e.g., 3000,3001):',
     default: new URL(baseUrl).port || '3000',
-    required: true,
-    validate: val => /^(\d+,)*\d+$/.test(val) || 'Please enter a comma-separated list of numbers.'
+    required: false,
+    validate: val => !val || /^(\d+,)*\d+$/.test(val) || 'Please enter a comma-separated list of numbers.'
   });
 
-  updateConfig({ baseUrl, playwrightConfig, ports });
+  const baseUrls: string[] = [];
+  if (ports) {
+    const urlObj = new URL(baseUrl);
+    const portList = ports.split(',');
+    for (const p of portList) {
+      urlObj.port = p;
+      baseUrls.push(urlObj.toString().replace(/\/$/, ''));
+    }
+  } else {
+    baseUrls.push(baseUrl);
+  }
+
+  let startServersSeparately = false;
+  if (baseUrls.length > 1) {
+    startServersSeparately = await confirm({
+      message: 'Do these servers need to be started separately?',
+      default: false,
+    });
+  }
+
+  const finalBaseUrl = baseUrls[0];
+
+  updateConfig({ baseUrl: finalBaseUrl, baseUrls, playwrightConfig, ports, startServersSeparately });
 
   let serverStarted = false;
   try {
-    serverStarted = await handleServerPrompt(await checkServerStatus(baseUrl, 3000));
+    let allServersUp = true;
+    for (const url of baseUrls) {
+      if (!(await checkServerStatus(url, 3000))) {
+        allServersUp = false;
+      }
+    }
+    serverStarted = await handleServerPrompt(allServersUp);
   } catch (error) {
     if (error instanceof Error) handleError(error);
 
@@ -77,9 +106,9 @@ export const flakeChecker = async (): Promise<void> => {
 
     return;
   }
-  log().info(`\nSelected Playwright tests: ${specs.map((spec: { value: any; }) => filename(spec.value)).join(', ')}`);
+  log().info(`\nSelected Playwright tests: ${specs.map((spec: { value: string; }) => filename(spec.value)).join(', ')}`);
 
-  const isolatedTests = await checkForIsolatedTests(specs.map((spec: { value: any; }) => spec.value));
+  const isolatedTests = await checkForIsolatedTests(specs.map((spec: { value: string; }) => spec.value));
 
   if (!isolatedTests) gracefulExit();
 
@@ -90,9 +119,9 @@ export const flakeChecker = async (): Promise<void> => {
     validate: val => val! > 0 || 'Number of runs must be at least 1.'
   });
 
-  const testExecutionResult = await runPlaywrightTests(specs.map((spec: { value: any; }) => spec.value), playwrightConfig, numberOfRuns!);
+  const testExecutionResult = await runPlaywrightTests(specs.map((spec: { value: string; }) => spec.value), playwrightConfig, numberOfRuns!);
 
-  log().cyan(`\n--- Flake Check Analysis ---\n`);
+  log().cyan('\n--- Flake Check Analysis ---\n');
 
   if (testExecutionResult.success) {
     log().info(success('All tests passed consistently across all repetitions. No failures or flake detected!\n'));
