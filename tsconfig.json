@@ -13,6 +13,6 @@
     "declaration": true,
     "sourceMap": true
   },
-  "include": ["src/**/*.ts", "index.d.ts", ".eslintrc.cjs"],
+  "include": ["src/**/*.ts", "index.d.ts", ".eslintrc.cjs", "test/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

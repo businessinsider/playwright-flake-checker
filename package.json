@@ -13,7 +13,7 @@
     "build": "tsc",
     "lint": "eslint .",
     "prepare": "npm run build",
-    "test": "echo \"Error: no test specified yet\" && exit 1"
+    "test": "vitest run"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
@@ -50,7 +50,9 @@
     "@typescript-eslint/parser": "^8.33.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.4",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0",
+    "@vitest/coverage-v8": "^1.5.0"
   },
   "peerDependencies": {
     "playwright": ">=1.45.0"
