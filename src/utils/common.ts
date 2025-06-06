@@ -13,7 +13,7 @@ export const sleep = (ms: number): Promise<void> => {
   return new Promise(resolve => {
     setTimeout(resolve, ms);
   });
-}
+};
 
 /**
  * Finds and parses the package.json file from the current directory.
@@ -26,13 +26,13 @@ export const findPackageJson = (): PackageJson => {
 
   try {
     packageJson = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
-  } catch (error) {
+  } catch {
     log().yellow('Warning: package.json not found. Project name and scripts will be unavailable.');
     packageJson = { name: 'Unknown Project', scripts: {} };
   }
 
   return packageJson;
-}
+};
 
 /**
  * Gracefully exits the script, stopping any detached server if running.
@@ -56,7 +56,7 @@ export const gracefulExit = () => {
   }
 
   process.exit(1);
-}
+};
 
 /**
  * Handles errors by logging them and gracefully exiting the script.
@@ -88,7 +88,7 @@ export const handleError = (error: Error): void => {
 
     gracefulExit();
   }
-}
+};
 
 /**
  * Retrieves all script entries from package.json and formats them as name-value pairs.
@@ -104,4 +104,4 @@ export const projectScripts = (): { name: string; value: string }[] => {
     name,
     value: name
   }));
-}
+};

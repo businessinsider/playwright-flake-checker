@@ -9,9 +9,11 @@ const { filename } = styled;
  */
 let config: Config = {
   baseUrl: '',
+  baseUrls: [],
   playwrightConfig: '',
   ports: '',
-}
+  startServersSeparately: false
+};
 
 /**
  * Retrieves the application configuration as a readonly object.
@@ -21,7 +23,7 @@ let config: Config = {
  */
 export const getConfig = (): Readonly<Config> => {
   return { ...config };
-}
+};
 
 /**
  * Updates the global configuration by merging the current configuration
@@ -31,7 +33,7 @@ export const getConfig = (): Readonly<Config> => {
  */
 export const updateConfig = (newConfig: Partial<Config>): void => {
   config = { ...config, ...newConfig };
-}
+};
 
 /**
  * Prompts the user to enter a configuration filename and validates its existence.
@@ -49,7 +51,7 @@ export const getCustomConfig = async (): Promise<string> => {
   log().info(`\nFound config file: ${filename(customConfig)}\n`);
 
   return customConfig;
-}
+};
 
 /**
  * Searches for Playwright configuration files in the current working directory.

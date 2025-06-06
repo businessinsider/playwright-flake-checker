@@ -7,11 +7,26 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:playwright/recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
+  overrides: [
+    {
+      files: ['*.ts', '*.js'],
+    }
+  ],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2020,
-    sourceType: "module"
+    project: ['./tsconfig.json'],
+    sourceType: 'module'
   },
+  plugins: ['@typescript-eslint'],
+  settings: {
+    'import/resolver': {
+      typescript: {},
+    },
+  },
+  root: true,
   rules: {
     'no-console': 'off',
     'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],

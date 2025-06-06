@@ -46,6 +46,8 @@
     "@types/eslint": "^9.6.1",
     "@types/figlet": "^1.5.8",
     "@types/node": "^20.17.58",
+    "@typescript-eslint/eslint-plugin": "^8.33.1",
+    "@typescript-eslint/parser": "^8.33.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.4",
     "typescript": "^5.4.5"

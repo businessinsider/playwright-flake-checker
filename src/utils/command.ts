@@ -21,7 +21,7 @@ export const cleanup = (
   child.removeListener('exit', handlers.exit);
   child.removeListener('close', handlers.exit);
   child.removeListener('error', handlers.error);
-}
+};
 
 /**
  * Creates a command executor function that runs shell commands as child processes
@@ -115,7 +115,7 @@ export const createCommandExecutor = (): (
     child.once('exit', handlers.exit);
     child.once('error', handlers.error);
   });
-}
+};
 
 /**
  * Executes commands using the command executor created by `createCommandExecutor`.

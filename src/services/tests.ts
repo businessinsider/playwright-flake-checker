@@ -2,7 +2,6 @@ import { confirm } from '@inquirer/prompts';
 import { select } from 'inquirer-select-pro';
 import chalk from 'chalk';
 import { runCommand } from '../utils/command.js';
-import { gracefulExit } from '../utils/common.js';
 import { log, styled } from '../utils/logger.js';
 import { ESLint } from 'eslint';
 import path from 'path';
@@ -47,7 +46,7 @@ export const checkForIsolatedTests = async (specs: string[]): Promise<boolean> =
   }
 
   return true;
-}
+};
 
 /**
  * Fetches and selects Playwright test files from the specified configuration file.
@@ -117,7 +116,7 @@ export const getAndSelectPlaywrightTests = async (playwrightConfigFile: string):
   });
 
   return selectedSpecs.map(spec => ({ name: spec, value: spec }));
-}
+};
 
 /**
  * Runs Playwright tests with the specified configuration and repeat count.
@@ -137,4 +136,4 @@ export const runPlaywrightTests = async (
   const result = await runCommand('PLAYWRIGHT_HTML_OPEN=\'never\'', args, {}, false, false);
 
   return { success: result.success, output: result.output };
-}
+};
