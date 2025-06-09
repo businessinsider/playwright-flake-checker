@@ -71,3 +71,17 @@ When you run the tool, it will guide you through the following steps:
 - Node.js 18+
 - Playwright project with test files
 - ESLint configured for optimal `.only` detection
+
+## Demo Project
+
+A minimal Playwright project is available in the [`demo`](demo/) directory. It contains a basic test that visits [playwright.dev](https://playwright.dev) and checks the page title. This demo can be used to try out the flake checker.
+
+### Running the demo
+
+```bash
+cd demo
+npm install
+npx playwright install
+npx playwright test # optional: run the test once
+npx playwright-flake-checker
+```
