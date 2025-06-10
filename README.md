@@ -68,9 +68,70 @@ When you run the tool, it will guide you through the following steps:
 
 ## Requirements
 
-- Node.js 18+
+- Node.js 22+
 - Playwright project with test files
 - ESLint configured for optimal `.only` detection
+
+## Contributing
+
+Contributions are welcome! Here's how you can help improve this project:
+
+### Development Setup
+
+1. Fork and clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/playwright-flake-checker.git
+   cd playwright-flake-checker
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up your Node.js environment:
+   ```bash
+   # The project uses Node.js 22+
+   nvm use
+   ```
+
+### Development Workflow
+
+1. Create a branch for your feature or fix:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+2. Make your changes and write tests for them
+
+3. Run tests to ensure everything works:
+   ```bash
+   npm test
+   ```
+
+4. Run ESLint to ensure code quality:
+   ```bash
+   npm run lint
+   ```
+
+5. Build the project to check for compilation errors:
+   ```bash
+   npm run build
+   ```
+
+6. Submit a pull request with a clear description of your changes
+
+### Running the Demo Project
+
+The demo project can be used to test your changes:
+
+```bash
+cd demo
+npm install
+npx playwright install
+npm test # Run the tests once
+npx ../ # Run your local version of the flake checker
+```
 
 ## Demo Project
 
