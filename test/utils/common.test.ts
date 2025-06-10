@@ -7,7 +7,7 @@ describe('common utility module', () => {
   describe('sleep function', () => {
     test('returns a promise that resolves after the specified time', async () => {
       const startTime = Date.now();
-      await sleep(50); // Sleep for 50ms (small value to keep tests fast)
+      await sleep(50);
       const elapsed = Date.now() - startTime;
 
       // Allow for some margin of error in the timing
@@ -19,7 +19,6 @@ describe('common utility module', () => {
     let mockFs;
 
     beforeEach(() => {
-      // Set up mock for filesystem
       mockFs = mock.method(fs, 'readFileSync', () => {
         return JSON.stringify({
           name: 'test-project',
@@ -78,8 +77,6 @@ describe('common utility module', () => {
 
   describe('handleError function', () => {
     test('handleError is a function', () => {
-      // Since process.exit is hard to mock correctly, we'll just verify
-      // the function exists and has the right signature
       assert.equal(typeof handleError, 'function');
     });
   });

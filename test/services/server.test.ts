@@ -20,8 +20,6 @@ describe('server module', () => {
 
   describe('startServer', () => {
     test('is a function that can be called', () => {
-      // We won't actually call startServer since it would prompt for user input
-      // Just verify it's a function
       assert.equal(typeof startServer, 'function');
     });
   });

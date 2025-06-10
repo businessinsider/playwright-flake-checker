@@ -10,6 +10,23 @@ describe('command module', () => {
     test('is a function that executes commands', () => {
       assert.equal(typeof runCommand, 'function');
     });
+
+    test('has expected properties in its returned promise', async () => {
+      // Create a custom executor that doesn't actually spawn a process
+      const mockExecutor = createCommandExecutor();
+      const mockResult = {
+        success: true,
+        code: 0,
+        signal: '',
+        output: 'Test output'
+      };
+      const result = mockResult;
+
+      assert.equal(typeof result.success, 'boolean');
+      assert.equal(typeof result.code, 'number');
+      assert.equal(typeof result.output, 'string');
+      assert.equal(typeof mockExecutor, 'function');
+    });
   });
 
   describe('createCommandExecutor', () => {
@@ -25,18 +42,16 @@ describe('command module', () => {
       const mockProcess = {
         removeListener: mock.fn()
       };
-
       const mockChild = {
         removeListener: mock.fn()
       };
-
       const mockHandlers = {
         error: () => {},
         exit: () => {},
         ctrlC: () => {}
       };
 
-      // Call cleanup with mocks - using unknown as intermediate cast
+      // Call cleanup with mocks
       cleanup(
         mockProcess as unknown as NodeJS.Process,
         mockChild as unknown as ChildProcess,

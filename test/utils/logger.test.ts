@@ -5,18 +5,15 @@ import { mock } from 'node:test';
 
 describe('logger module', () => {
   describe('log function', () => {
-    // Mocks for console methods
     let mockConsoleInfo;
     let mockConsoleError;
 
     beforeEach(() => {
-      // Set up mocks before each test
       mockConsoleInfo = mock.method(console, 'info', () => {});
       mockConsoleError = mock.method(console, 'error', () => {});
     });
 
     afterEach(() => {
-      // Clean up mocks after each test
       mockConsoleInfo.mock.restore();
       mockConsoleError.mock.restore();
     });
@@ -34,14 +31,12 @@ describe('logger module', () => {
       logger.error('Test error message');
 
       assert.equal(mockConsoleError.mock.calls.length, 1);
-      // Error is styled, so we just check that it was called
       assert.ok(mockConsoleError.mock.calls[0].arguments.length > 0);
     });
 
     test('provides color methods that call console.info with chalk styling', () => {
       const logger = log();
 
-      // Test various color methods
       logger.yellow('Yellow message');
       logger.green('Green message');
       logger.red('Red message');
@@ -50,20 +45,17 @@ describe('logger module', () => {
       logger.blue('Blue message');
       logger.gray('Gray message');
 
-      // Each call should go to console.info
       assert.equal(mockConsoleInfo.mock.calls.length, 7);
     });
 
     test('provides formatting methods that call console.info with chalk styling', () => {
       const logger = log();
 
-      // Test various formatting methods
       logger.bold('Bold message');
       logger.dim('Dim message');
       logger.underline('Underlined message');
       logger.italic('Italic message');
 
-      // Each call should go to console.info
       assert.equal(mockConsoleInfo.mock.calls.length, 4);
     });
 
@@ -73,7 +65,6 @@ describe('logger module', () => {
       logger.warning('Warning message');
       logger.success('Success message');
 
-      // Each call should go to console.info
       assert.equal(mockConsoleInfo.mock.calls.length, 2);
     });
   });
@@ -88,7 +79,6 @@ describe('logger module', () => {
     });
 
     test('styling functions format messages correctly', () => {
-      // Test that styled functions return formatted strings
       const errorMessage = styled.error('Test error');
       assert.ok(typeof errorMessage === 'string');
       assert.ok(errorMessage.includes('Test error'));
