@@ -1,6 +1,6 @@
 {
   "name": "@businessinsider/playwright-flake-checker",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A tool to check for flaky Playwright tests by running them multiple times and analyzing results.",
   "bin": {
     "playwright-flake-checker": "dist/cli.js"
