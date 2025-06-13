@@ -1,0 +1,41 @@
+name: Lint
+
+on:
+  workflow_call:
+
+jobs:
+  lint-test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Use Node.js from .nvmrc
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+
+    - name: Cache Dependencies
+      id: node-modules-cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          node_modules
+        key: modules-${{ hashFiles('package-lock.json') }}
+
+    - name: Install Dependencies
+      if: steps.node-modules-cache.outputs.cache-hit != 'true'
+      run: npm ci
+
+    - name: Run eslint on changed files
+      uses: tj-actions/eslint-changed-files@v25
+      with:
+        skip_annotations: "true"
+        config_path: ".eslintrc.cjs"
+        ignore_patterns: ".eslintignore"
+
+    - name: Run Lint
+      run: npm run --silent lint

@@ -12,12 +12,44 @@ module.exports = {
   overrides: [
     {
       files: ['*.ts', '*.js'],
+    },
+    {
+      files: ['**/*.test.ts'],
+      extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended',
+      ],
+      parserOptions: {
+        project: ['./tsconfig.test.json']
+      },
+      rules: {
+        'playwright/no-focused-test': 'off',
+        'playwright/no-skipped-test': 'off',
+        'playwright/valid-title': 'off',
+        'playwright/no-conditional-in-test': 'off',
+        'playwright/no-force-option': 'off',
+        'playwright/prefer-web-first-assertions': 'off',
+        'playwright/expect-expect': 'off',
+        // Relaxed rules for test files
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-unused-vars': 'off',
+        '@typescript-eslint/no-require-imports': 'off',
+        'no-unused-vars': 'off'
+      }
+    },
+    {
+      files: ['.eslintrc.cjs'],
+      parser: 'espree',
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module'
+      }
     }
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2020,
-    project: ['./tsconfig.json'],
+    project: ['./tsconfig.json', './tsconfig.test.json'],
     sourceType: 'module'
   },
   plugins: ['@typescript-eslint'],

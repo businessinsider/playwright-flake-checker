@@ -1,0 +1,30 @@
+name: Code Quality
+
+on:
+  pull_request:
+    types: [ready_for_review, opened, reopened, synchronize]
+    paths-ignore:
+      - .editorconfig
+      - .eslintignore
+      - .gitignore
+      - "demo/**"
+      - README.md
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  setup:
+    name: Setup
+    uses: ./.github/workflows/setup.yml
+
+  lint:
+    name: Lint
+    needs: setup
+    uses: ./.github/workflows/lint.yml
+
+  test:
+    name: Test
+    needs: setup
+    uses: ./.github/workflows/tests.yml

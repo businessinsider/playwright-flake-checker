@@ -45,14 +45,14 @@ export const gracefulExit = () => {
   const detachedServer = isDetachedServerRunning();
 
   if (detachedServer && CONFIG.ports) {
-    log().red('\nStopping detached server and exiting script...');
+    log().warning('\nStopping detached server and exiting script...');
 
     spawn('npx', ['kill-port', CONFIG.ports], {
       stdio: 'ignore',
       detached: true
     }).unref();
   } else {
-    log().red('\nExiting script...');
+    log().warning('\nExiting script...');
   }
 
   process.exit(1);
