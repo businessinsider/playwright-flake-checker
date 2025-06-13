@@ -12,9 +12,8 @@ describe('flake-checker module', () => {
     assert.equal(typeof flakeChecker, 'function');
 
     // The function should return a Promise
-    const isPromise = flakeChecker.toString().includes('async') ||
-      flakeChecker.toString().includes('Promise');
-    assert.ok(isPromise, 'flakeChecker should be async or return a Promise');
+    const result = flakeChecker();
+    assert.ok(result instanceof Promise, 'flakeChecker should return a Promise');
 
     // We won't actually call it since it has interactive elements
     // Instead, we can just check that it doesn't throw an error when called
