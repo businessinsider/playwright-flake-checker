@@ -1,4 +1,4 @@
-# <p align="left"> @businessinsider/playwright-flake-checker <a href="https://playwright.dev/" target="_blank" rel="noreferrer"> <img src="https://playwright.dev/img/playwright-logo.svg" alt="playwright" width="40" height="40"/> </a> </p>
+# <p align="left"> playwright-flake-checker <a href="https://playwright.dev/" target="_blank" rel="noreferrer"> <img src="https://playwright.dev/img/playwright-logo.svg" alt="playwright" width="40" height="40"/> </a> </p>
 
 ## Overview
 
