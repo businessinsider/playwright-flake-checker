@@ -16,7 +16,6 @@
     "test": "node --import tsx --test test/**/*.test.ts"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/",
     "access": "public"
   },
   "repository": {
